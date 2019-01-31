@@ -29,29 +29,24 @@
   * dimensions (These represent the character's size in the video game)
   * destroy() // prototype method that returns: '{this.name} was removed from the game.'
 */
+// Build constructor 
   function GameObject(attributes) {
-    console.log(attributes);
   this.name = attributes.name;
   this.createdAt = attributes.createdAt;
   this.dimensions = attributes.dimensions;  
 }
 
+// Method for this constructor
 GameObject.prototype.destroy = function() {
   return (`${this.name} was removed from the game`);
 }
 
-function Child(childAttributes) {
-  //bind the this keyword to the Parent constructor
-  GameObject.call(this.childAttributes);
-  this.destroy = childAttributes.destroy;
-}
+// function Child(childAttributes) {
+//   //bind the this keyword to the Parent constructor
+//   GameObject.call(this.childAttributes);
+//   this.destroy = childAttributes.destroy;
+// }
 
-//Must place new method AFTER the Object.create();
-Child.prototype.destroy = function() {
-  console.log(`${this.name} took damage`)
-}
-
-GameObject.prototype = Object.create(GameObject.prototype);
 
 /*
   === CharacterStats ===
@@ -59,14 +54,21 @@ GameObject.prototype = Object.create(GameObject.prototype);
   * takeDamage() // prototype method -> returns the string '<object name> took damage.'
   * should inherit destroy() from GameObject's prototype
 */
-const CharacterStats = new Child ({
-  healthPoints: 0,
-  takeDamage() {
-        return (`${this.name} took damage.`);
-      },
-});
+function CharacterStats(statsAttributes) {
+  this.healthPoints = statsAttributes.healthPoints;
+    GameObject.call(this.statsAttributes);
+};
 
-// console.log(CharacterStats.healthPoints);
+// Inheritance
+CharacterStats.prototype = Object.create(GameObject.prototype);
+
+//methods for this constructor 
+//Must place new method AFTER the Object.create();
+CharacterStats.prototype.takeDamage = function() {
+  return (`${this.name} took damage`) 
+}
+
+
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -77,10 +79,30 @@ const CharacterStats = new Child ({
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
-
-const Humanoid = new Child ({
-
+function Humanoid (humanoidAttributes){
+this.team = humanoidAttributes.team;
+this.weapons = humanoidAttributes.weapons;
+this.language = humanoidAttributes.language;
+CharacterStats.call(this.humanoidAttributes);
 }
+
+//Humanoid methods
+//* greet() // prototype method -> returns the string '<object name> offers a greeting in <object language>.'
+Humanoid.prototype.greet = function() {
+      return ('${this.name} offers a greeting in ${this.language}.');
+    }
+
+// Inheritance
+// * should inherit destroy() from GameObject through CharacterStats
+Humanoid.prototype = Object.create(CharacterStats.prototype);
+
+//methods for this constructor 
+//Must place new method AFTER the Object.create();
+//* should inherit takeDamage() from CharacterStats
+Humanoid.prototype.takeDamage = function() {
+  return (`${this.name} took damage`) 
+}
+
 
 // const Humanoid = {
 //   name: "Humanoid",
