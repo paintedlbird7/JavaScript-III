@@ -9,13 +9,64 @@
   
   Each constructor function has unique properties and methods that are defined in their block comments below:
 */
-  
+   
+/*
+  * Inheritance chain: GameObject -> CharacterStats -> Humanoid
+  * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
+  * Instances of CharacterStats should have all of the same properties as GameObject.
+*/
+
+// Test you work by un-commenting these 3 objects and the list of console logs below:
 
 
 
 
 
+/*
+  === GameObject ===
+  * createdAt
+  * name
+  * dimensions (These represent the character's size in the video game)
+  * destroy() // prototype method that returns: '{this.name} was removed from the game.'
+*/
+  function GameObject(attributes) {
+    console.log(attributes);
+  this.name = attributes.name;
+  this.createdAt = attributes.createdAt;
+  this.dimensions = attributes.dimensions;  
+}
 
+GameObject.prototype.destroy = function() {
+  return (`${this.name} was removed from the game`);
+}
+
+function Child(childAttributes) {
+  //bind the this keyword to the Parent constructor
+  GameObject.call(this.childAttributes);
+  this.destroy = childAttributes.destroy;
+}
+
+//Must place new method AFTER the Object.create();
+Child.prototype.destroy = function() {
+  console.log(`${this.name} took damage`)
+}
+
+GameObject.prototype = Object.create(GameObject.prototype);
+
+/*
+  === CharacterStats ===
+  * healthPoints
+  * takeDamage() // prototype method -> returns the string '<object name> took damage.'
+  * should inherit destroy() from GameObject's prototype
+*/
+const CharacterStats = new Child ({
+  healthPoints: 0,
+  takeDamage() {
+        return (`${this.name} took damage.`);
+      },
+});
+
+// console.log(CharacterStats.healthPoints);
 
 /*
   === Humanoid (Having an appearance or character resembling that of a human.) ===
@@ -26,59 +77,10 @@
   * should inherit destroy() from GameObject through CharacterStats
   * should inherit takeDamage() from CharacterStats
 */
- 
-/*
-  * Inheritance chain: GameObject -> CharacterStats -> Humanoid
-  * Instances of Humanoid should have all of the same properties as CharacterStats and GameObject.
-  * Instances of CharacterStats should have all of the same properties as GameObject.
-*/
 
+const Humanoid = new Child ({
 
-
-
-
-
-// Test you work by un-commenting these 3 objects and the list of console logs below:
-
-
-
-
-  
-  const GameObject(attributes){
-  this.createdAt = attributes.createdAt;
-  this.dimensions = attributes.dimensions;  
-};
-
-GameObject.prototype.destroy = function () {
-  return `${name} was removed from the game`;
 }
-
-
-
-/*
-  === CharacterStats ===
-  * healthPoints
-  * takeDamage() // prototype method -> returns the string '<object name> took damage.'
-  * should inherit destroy() from GameObject's prototype
-*/
-
-// const CharacterStats = {
-//   name: "Character Stats",
-//   healthPoints: 0,
-//   takeDamage() {
-//     return `${name} took damage.`;
-//   },
-// };
-
-
-/*
-  === GameObject ===
-  * createdAt
-  * name
-  * dimensions (These represent the character's size in the video game)
-  * destroy() // prototype method that returns: '{this.name} was removed from the game.'
-*/
-
 
 // const Humanoid = {
 //   name: "Humanoid",
